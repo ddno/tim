@@ -2,11 +2,10 @@ use std::sync::mpsc::channel;
 use std::sync::{Arc, Mutex};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
-use std::{env, fs};
 
 use fltk::button::Button;
 use fltk::enums::{Event, Key};
-use fltk::{app, enums, enums::Color, frame::Frame, group, input, prelude::*, window::Window};
+use fltk::{app, enums::Color, frame::Frame, group, input, prelude::*, window::Window};
 
 use crate::window_manager::WindowManager;
 

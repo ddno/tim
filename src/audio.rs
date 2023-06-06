@@ -1,7 +1,6 @@
+use std::env;
 use std::fs::File;
 use std::io::BufReader;
-use std::path::PathBuf;
-use std::{env, fs};
 
 use rodio::{source::Source, Decoder, OutputStream};
 
@@ -24,6 +23,13 @@ impl Audio {
     }
 
     fn get_file_path() -> String {
+        if let Ok(exe_path) = env::current_exe() {
+            return exe_path
+                .to_string_lossy()
+                .to_string()
+                .replace("/MacOS/tim", "/Resources/assets/alarm.mp3");
+        }
+
         let current_dir = env::current_dir().unwrap();
         let mut current_dir = current_dir.to_string_lossy().to_string();
 
