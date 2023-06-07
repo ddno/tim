@@ -1,6 +1,6 @@
-use std::env;
 use std::fs::File;
 use std::io::BufReader;
+use std::{env};
 
 use rodio::{source::Source, Decoder, OutputStream};
 
@@ -23,20 +23,20 @@ impl Audio {
     }
 
     fn get_file_path() -> String {
+        let current_dir = env::current_dir().unwrap();
+        let mut current_dir = current_dir.to_string_lossy().to_string();
+
+        if !current_dir.contains("Tim.app") && current_dir != "/" {
+            current_dir = current_dir + "/assets/alarm.mp3";
+
+            return current_dir;
+        }
+
         if let Ok(exe_path) = env::current_exe() {
             return exe_path
                 .to_string_lossy()
                 .to_string()
                 .replace("/MacOS/tim", "/Resources/assets/alarm.mp3");
-        }
-
-        let current_dir = env::current_dir().unwrap();
-        let mut current_dir = current_dir.to_string_lossy().to_string();
-
-        if !current_dir.contains("Tim.app") {
-            current_dir = current_dir + "/assets/alarm.mp3";
-
-            return current_dir;
         }
 
         return "".to_string();
