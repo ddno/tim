@@ -5,7 +5,7 @@ use std::time::{Duration, Instant};
 
 use fltk::button::Button;
 use fltk::enums;
-use fltk::enums::{Color};
+use fltk::enums::Color;
 use fltk::group::Flex;
 use fltk::input::IntInput;
 use fltk::prelude::{InputExt, WidgetBase, WidgetExt};
