@@ -4,12 +4,14 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use fltk::button::Button;
-use fltk::enums::Color;
+use fltk::enums;
+use fltk::enums::{Color};
+use fltk::group::Flex;
 use fltk::input::IntInput;
 use fltk::prelude::{InputExt, WidgetBase, WidgetExt};
 use fltk::window::Window;
 
-use crate::ChannelMessage;
+use crate::{ChannelMessage, WINDOW_HEIGHT};
 
 #[derive(Debug, Copy, Clone)]
 enum State {
@@ -30,10 +32,17 @@ impl StartButton {
         tx: ::fltk::app::Sender<ChannelMessage>,
         window: Arc<Mutex<Window>>,
         thread_tx: Arc<Mutex<Sender<ChannelMessage>>>,
+        mut flex: Flex,
     ) -> Self {
-        let mut button = Button::new(10, 90, 80, 40, "Start");
+        let mut button = Button::new(10, 90, 85, 40, "Start");
         let mut state = State::Pause;
         let countdown = Arc::new(Mutex::new(60 * 5));
+
+        button.set_color(Color::Blue);
+        button.set_label_color(Color::Black);
+        button.set_frame(enums::FrameType::PlasticThinUpBox);
+        button.set_label_font(enums::Font::HelveticaBold);
+        button.set_label_size(18);
 
         button.set_callback(move |_button| {
             println!("Clicked StartButton");
@@ -42,6 +51,8 @@ impl StartButton {
             println!("Input minutes value: {}", input_seconds.value());
 
             dbg!(state);
+
+            _button.set_color(Color::Blue);
 
             let start_time = Instant::now();
             let mut duration = Duration::from_secs(
@@ -59,6 +70,8 @@ impl StartButton {
                 State::Start => {
                     _button.set_label("Pause");
                     state = State::Pause;
+
+                    _button.set_color(Color::Green);
                 }
                 State::Pause => {
                     _button.set_label("Resume");
@@ -80,12 +93,14 @@ impl StartButton {
                 State::Resume(seconds_left) => {
                     _button.set_label("Pause");
                     state = State::Pause;
+                    _button.set_color(Color::Green);
 
                     duration = Duration::from_secs(seconds_left as u64);
                 }
             }
 
-            window.lock().unwrap().set_size(200, 200);
+            flex.hide();
+            window.lock().unwrap().set_size(200, WINDOW_HEIGHT);
             window.lock().unwrap().set_color(Color::Black);
 
             while let Ok(ChannelMessage::StopCountdown) = thread_rx.lock().unwrap().try_recv() {
@@ -119,7 +134,7 @@ impl StartButton {
                     break;
                 }
 
-                thread::sleep(Duration::from_millis(500));
+                thread::sleep(Duration::from_millis(100));
             });
         });
 

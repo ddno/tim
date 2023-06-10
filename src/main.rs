@@ -13,6 +13,8 @@ mod buttons;
 mod keyboard_event;
 mod window_manager;
 
+const WINDOW_HEIGHT: i32 = 140;
+
 #[derive(Debug, Copy, Clone)]
 pub enum ChannelMessage {
     UpdateCountdown(u32),
@@ -24,7 +26,7 @@ fn main() {
 
     let mut window_manager = WindowManager::new(
         Window::default()
-            .with_size(200, 200)
+            .with_size(200, WINDOW_HEIGHT)
             .with_label("Tim the Timer")
             .with_pos(50, 160),
     );
@@ -32,7 +34,7 @@ fn main() {
     window_manager.set_color(Color::Black);
 
     let mut frame = Frame::default()
-        .with_pos(0, -50)
+        .with_pos(0, -23)
         .size_of(&*window_manager.get_window().lock().unwrap());
 
     window_manager.update_countdown(&mut frame, 60 * 5);
@@ -44,9 +46,19 @@ fn main() {
     let mut flex = group::Flex::default()
         .with_size(100, 100)
         .column()
-        .with_pos(10, 210);
+        .with_pos(10, 150);
     let mut input_minutes = input::IntInput::default();
     let mut input_seconds = input::IntInput::default();
+
+    fn style_input_fields(input: &mut input::IntInput) {
+        input.set_color(Color::Black);
+        input.set_text_color(Color::White);
+        input.set_selection_color(Color::Blue);
+        input.set_text_size(22);
+    }
+
+    style_input_fields(&mut input_minutes);
+    style_input_fields(&mut input_seconds);
 
     input_minutes.set_value(&"5".to_owned());
     input_seconds.set_value(&"0".to_owned());
@@ -68,6 +80,7 @@ fn main() {
         tx,
         window_manager.get_window().clone(),
         thread_tx.clone(),
+        flex.clone(),
     );
 
     SetButton::new(
