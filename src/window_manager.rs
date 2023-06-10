@@ -49,14 +49,11 @@ impl WindowManager {
         frame.set_label(&*String::from(minutes_string + ":" + &seconds_string));
 
         if countdown == 60 {
-            self.set_color(Color::Yellow);
-            frame.set_label_color(Color::DarkRed);
+            self.set_color(Color::DarkBlue);
         } else if countdown <= 10 && countdown > 0 {
             self.set_color(Color::Red);
-            frame.set_label_color(Color::White);
         } else if countdown == 0 {
             crate::audio::Audio::play_sound();
-            frame.set_label_color(Color::White);
         }
     }
 }
