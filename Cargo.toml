@@ -1,6 +1,6 @@
 [package]
 name = "tim"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = ""
 
@@ -15,5 +15,5 @@ rodio = "0.16.0"
 name = "Tim"
 identifier = "com.ddno.tim"
 icon = ["assets/timer.png"]
-resources = ["assets"]
+resources = ["assets/*.wav", "assets/*.mp3"]
 category = "Utility"
