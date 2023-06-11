@@ -74,8 +74,8 @@ fn main() {
     let thread_rx = Arc::new(Mutex::new(thread_rx));
 
     let start_button = StartButton::new(
-        input_minutes,
-        input_seconds,
+        input_minutes.clone(),
+        input_seconds.clone(),
         thread_rx,
         tx,
         window_manager.get_window().clone(),
@@ -90,7 +90,13 @@ fn main() {
         thread_tx.clone(),
     );
 
-    KeyboardEvent::new(window_manager.get_window(), start_button.button.clone());
+    KeyboardEvent::new(
+        window_manager.get_window(),
+        start_button.button.clone(),
+        input_minutes,
+        input_seconds,
+        tx,
+    );
 
     window_manager.get_window().lock().unwrap().show();
 

@@ -3,7 +3,16 @@
 Countdown timer written in Rust with the fltk-rs library.
 Mainly developed for Mac but should also work on other operating systems.
 
-To use your own alarm sound place a file name alarm.mp3 in the /assets folder.
+## Features
+
+- Changing background color when the countdown reaches one minute, then again when it reaches ten seconds.
+- Use the default alarm sound or place a file named alarm.mp3 in the /assets folder for your own alarm sound.
+- Set the timer using keyboard controls:
+    - Up/Down arrow keys: Increase/decrease minutes by one
+    - Ctrl + Up/Down arrow keys: Increase/decrease minutes by five
+    - Shift + Up/Down arrow keys: Increase/decrease seconds by one
+    - Ctrl + Shift + Up/Down arrow keys: Increase/decrease seconds by five
+    - Enter: Start/Pause countdown
 
 ## Running the releases
 
