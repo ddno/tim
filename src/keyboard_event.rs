@@ -23,7 +23,7 @@ impl KeyboardEvent {
         let mut input_minutes = input_minutes.clone();
         let mut input_seconds = input_seconds.clone();
 
-        let update_countdown = move |increase_minutes: i32, increase_seconds: i32| {
+        let change_countdown = move |increase_minutes: i32, increase_seconds: i32| {
             let mut new_input_minutes =
                 input_minutes.value().parse::<i32>().unwrap() + increase_minutes;
 
@@ -58,14 +58,14 @@ impl KeyboardEvent {
             tx.send(ChannelMessage::UpdateCountdown(countdown));
         };
 
-        let mut update_countdown_minutes = update_countdown.clone();
-        let mut update_minutes = move |minutes: i32| {
-            update_countdown_minutes(minutes, 0);
+        let mut change_countdown_minutes = change_countdown.clone();
+        let mut change_minutes = move |minutes: i32| {
+            change_countdown_minutes(minutes, 0);
         };
 
-        let mut update_countdown_seconds = update_countdown.clone();
-        let mut update_seconds = move |seconds: i32| {
-            update_countdown_seconds(0, seconds);
+        let mut change_countdown_seconds = change_countdown.clone();
+        let mut change_seconds = move |seconds: i32| {
+            change_countdown_seconds(0, seconds);
         };
 
         window.lock().unwrap().handle(move |_, ev| match ev {
@@ -84,21 +84,21 @@ impl KeyboardEvent {
                 let event_key = app::event_key();
 
                 if is_ctrl_shift && event_key == Key::Up {
-                    update_seconds(5);
+                    change_seconds(5);
                 } else if is_ctrl_shift && event_key == Key::Down {
-                    update_seconds(-5);
+                    change_seconds(-5);
                 } else if is_shift && event_key == Key::Up {
-                    update_seconds(1);
+                    change_seconds(1);
                 } else if is_shift && event_key == Key::Down {
-                    update_seconds(-1);
+                    change_seconds(-1);
                 } else if is_ctrl && event_key == Key::Up {
-                    update_minutes(5);
+                    change_minutes(5);
                 } else if is_ctrl && event_key == Key::Down {
-                    update_minutes(-5);
+                    change_minutes(-5);
                 } else if event_key == Key::Up {
-                    update_minutes(1);
+                    change_minutes(1);
                 } else if event_key == Key::Down {
-                    update_minutes(-1);
+                    change_minutes(-1);
                 }
                 false
             }

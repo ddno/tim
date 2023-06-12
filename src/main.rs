@@ -43,10 +43,9 @@ fn main() {
 
     frame.set_label_color(Color::White);
 
-    let mut flex = group::Flex::default()
-        .with_size(100, 100)
-        .column()
-        .with_pos(10, 150);
+    let mut flex = group::Flex::default().with_size(180, 40).with_pos(10, 140);
+    flex.set_pad(12);
+
     let mut input_minutes = input::IntInput::default();
     let mut input_seconds = input::IntInput::default();
 
