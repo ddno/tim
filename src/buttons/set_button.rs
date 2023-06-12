@@ -14,6 +14,8 @@ pub struct SetButton {
     pub button: Button,
 }
 
+const EXPANDED_WINDOW_HEIGHT: i32 = 190;
+
 impl SetButton {
     pub fn new(
         mut start_button: Button,
@@ -30,8 +32,6 @@ impl SetButton {
         button.set_label_size(18);
 
         button.set_callback(move |_button| {
-            println!("Clicked SetButton");
-
             start_button.set_label("Start");
             start_button.set_color(Color::Blue);
 
@@ -43,12 +43,12 @@ impl SetButton {
                 .send(ChannelMessage::StopCountdown)
                 .expect("Failed to get stop countdown message");
 
-            if local_window.pixel_h() > 400 {
+            if local_window.pixel_h() > WINDOW_HEIGHT + EXPANDED_WINDOW_HEIGHT {
                 flex.hide();
                 local_window.set_size(200, WINDOW_HEIGHT);
             } else {
                 flex.show();
-                local_window.set_size(200, 260);
+                local_window.set_size(200, EXPANDED_WINDOW_HEIGHT);
             }
         });
 
