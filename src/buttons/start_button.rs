@@ -45,13 +45,6 @@ impl StartButton {
         button.set_label_size(18);
 
         button.set_callback(move |_button| {
-            println!("Clicked StartButton");
-
-            println!("Input minutes value: {}", input_minutes.value());
-            println!("Input minutes value: {}", input_seconds.value());
-
-            dbg!(state);
-
             _button.set_color(Color::Blue);
 
             let start_time = Instant::now();
@@ -125,7 +118,8 @@ impl StartButton {
                 }
 
                 tx.send(ChannelMessage::UpdateCountdown(
-                    remaining_time.as_secs() as u32
+                    remaining_time.as_secs() as u32,
+                    true,
                 ));
 
                 *countdown_clone.lock().unwrap() = remaining_time.as_secs() as u32;

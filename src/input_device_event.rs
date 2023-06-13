@@ -12,9 +12,9 @@ use fltk::window::Window;
 
 use crate::{ChannelMessage, WINDOW_WIDTH};
 
-pub struct KeyboardEvent {}
+pub struct InputDeviceEvent {}
 
-impl KeyboardEvent {
+impl InputDeviceEvent {
     pub fn new(
         window: Arc<Mutex<Window>>,
         mut start_button: Button,
@@ -39,10 +39,6 @@ impl KeyboardEvent {
             let mut new_input_seconds =
                 input_seconds.value().parse::<i32>().unwrap() + increase_seconds;
 
-            if new_input_minutes <= 0 && new_input_seconds <= 0 {
-                new_input_seconds = 1;
-            }
-
             input_minutes.set_value(&*format!("{}", new_input_minutes));
 
             if new_input_seconds < 0 {
@@ -57,7 +53,7 @@ impl KeyboardEvent {
             let countdown = (input_minutes.value().parse::<i32>().unwrap() * 60
                 + input_seconds.value().parse::<i32>().unwrap()) as u32;
 
-            tx.send(ChannelMessage::UpdateCountdown(countdown));
+            tx.send(ChannelMessage::UpdateCountdown(countdown, false));
         };
 
         let mut change_countdown_minutes = change_countdown.clone();

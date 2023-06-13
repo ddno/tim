@@ -12,7 +12,8 @@ Mainly developed for Mac but should also work on other operating systems.
     - Ctrl + Up/Down arrow keys: Increase/decrease minutes by five
     - Shift + Up/Down arrow keys: Increase/decrease seconds by one
     - Ctrl + Shift + Up/Down arrow keys: Increase/decrease seconds by five
-    - Enter: Start/Pause countdown
+    - Enter: Start/pause countdown
+- Set the timer with the mouse by hovering the cursor over the minutes or seconds display and scroll up or down
 
 ## Running the releases
 
