@@ -13,6 +13,7 @@ mod buttons;
 mod keyboard_event;
 mod window_manager;
 
+const WINDOW_WIDTH: i32 = 200;
 const WINDOW_HEIGHT: i32 = 140;
 
 #[derive(Debug, Copy, Clone)]
@@ -26,7 +27,7 @@ fn main() {
 
     let mut window_manager = WindowManager::new(
         Window::default()
-            .with_size(200, WINDOW_HEIGHT)
+            .with_size(WINDOW_WIDTH, WINDOW_HEIGHT)
             .with_label("Tim the Timer")
             .with_pos(50, 160),
     );
