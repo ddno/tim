@@ -71,10 +71,13 @@ impl InputDeviceEvent {
 
         window.lock().unwrap().handle(move |_, ev| match ev {
             Event::MouseWheel => {
-                let dy = app::event_dy();
+                if start_button.label() != "Start" {
+                    return false;
+                }
+
                 let mouse_pos_x = app::event_x();
 
-                match dy {
+                match app::event_dy() {
                     MouseWheel::Up => {
                         if mouse_pos_x < MIDDLE_OF_WINDOW {
                             change_minutes(-1);

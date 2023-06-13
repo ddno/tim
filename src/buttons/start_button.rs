@@ -54,8 +54,6 @@ impl StartButton {
             );
 
             if _button.label() == "Start" {
-                println!("Start button label is start");
-
                 state = State::Start;
             }
 
