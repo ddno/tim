@@ -11,7 +11,7 @@ use fltk::input::IntInput;
 use fltk::prelude::{InputExt, WidgetBase, WidgetExt};
 use fltk::window::Window;
 
-use crate::{ChannelMessage, WINDOW_HEIGHT};
+use crate::{ChannelMessage, WINDOW_HEIGHT, WINDOW_WIDTH};
 
 #[derive(Debug, Copy, Clone)]
 enum State {
@@ -45,13 +45,6 @@ impl StartButton {
         button.set_label_size(18);
 
         button.set_callback(move |_button| {
-            println!("Clicked StartButton");
-
-            println!("Input minutes value: {}", input_minutes.value());
-            println!("Input minutes value: {}", input_seconds.value());
-
-            dbg!(state);
-
             _button.set_color(Color::Blue);
 
             let start_time = Instant::now();
@@ -61,8 +54,6 @@ impl StartButton {
             );
 
             if _button.label() == "Start" {
-                println!("Start button label is start");
-
                 state = State::Start;
             }
 
@@ -100,7 +91,7 @@ impl StartButton {
             }
 
             flex.hide();
-            window.lock().unwrap().set_size(200, WINDOW_HEIGHT);
+            window.lock().unwrap().set_size(WINDOW_WIDTH, WINDOW_HEIGHT);
             window.lock().unwrap().set_color(Color::Black);
 
             while let Ok(ChannelMessage::StopCountdown) = thread_rx.lock().unwrap().try_recv() {
@@ -125,7 +116,8 @@ impl StartButton {
                 }
 
                 tx.send(ChannelMessage::UpdateCountdown(
-                    remaining_time.as_secs() as u32
+                    remaining_time.as_secs() as u32,
+                    true,
                 ));
 
                 *countdown_clone.lock().unwrap() = remaining_time.as_secs() as u32;

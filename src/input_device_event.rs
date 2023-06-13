@@ -1,18 +1,20 @@
 use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::Duration;
 
 use fltk::app;
-use fltk::app::Sender;
+use fltk::app::{MouseWheel, Sender};
 use fltk::button::Button;
 use fltk::enums::{Event, Key};
 use fltk::input::IntInput;
 use fltk::prelude::{InputExt, WidgetBase, WidgetExt};
 use fltk::window::Window;
 
-use crate::ChannelMessage;
+use crate::{ChannelMessage, WINDOW_WIDTH};
 
-pub struct KeyboardEvent {}
+pub struct InputDeviceEvent {}
 
-impl KeyboardEvent {
+impl InputDeviceEvent {
     pub fn new(
         window: Arc<Mutex<Window>>,
         mut start_button: Button,
@@ -37,10 +39,6 @@ impl KeyboardEvent {
             let mut new_input_seconds =
                 input_seconds.value().parse::<i32>().unwrap() + increase_seconds;
 
-            if new_input_minutes <= 0 && new_input_seconds <= 0 {
-                new_input_seconds = 1;
-            }
-
             input_minutes.set_value(&*format!("{}", new_input_minutes));
 
             if new_input_seconds < 0 {
@@ -55,7 +53,7 @@ impl KeyboardEvent {
             let countdown = (input_minutes.value().parse::<i32>().unwrap() * 60
                 + input_seconds.value().parse::<i32>().unwrap()) as u32;
 
-            tx.send(ChannelMessage::UpdateCountdown(countdown));
+            tx.send(ChannelMessage::UpdateCountdown(countdown, false));
         };
 
         let mut change_countdown_minutes = change_countdown.clone();
@@ -68,7 +66,40 @@ impl KeyboardEvent {
             change_countdown_seconds(0, seconds);
         };
 
+        const MIDDLE_OF_WINDOW: i32 = WINDOW_WIDTH / 2;
+        const SCROLL_REST_TIME: u64 = 30;
+
         window.lock().unwrap().handle(move |_, ev| match ev {
+            Event::MouseWheel => {
+                if start_button.label() != "Start" {
+                    return false;
+                }
+
+                let mouse_pos_x = app::event_x();
+
+                match app::event_dy() {
+                    MouseWheel::Up => {
+                        if mouse_pos_x < MIDDLE_OF_WINDOW {
+                            change_minutes(-1);
+                        } else {
+                            change_seconds(-1);
+                        }
+                        thread::sleep(Duration::from_millis(SCROLL_REST_TIME));
+                    }
+                    MouseWheel::Down => {
+                        if mouse_pos_x < MIDDLE_OF_WINDOW {
+                            change_minutes(1);
+                        } else {
+                            change_seconds(1);
+                        }
+
+                        thread::sleep(Duration::from_millis(SCROLL_REST_TIME));
+                    }
+                    _ => {}
+                }
+                true
+            }
+
             Event::KeyUp => {
                 if app::event_key() == Key::Enter {
                     start_button.do_callback();

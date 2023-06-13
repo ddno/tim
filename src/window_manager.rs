@@ -26,7 +26,7 @@ impl WindowManager {
         w.set_color(color);
     }
 
-    pub fn update_countdown(&mut self, frame: &mut Frame, countdown: u32) {
+    pub fn update_countdown(&mut self, frame: &mut Frame, countdown: u32, update_background: bool) {
         let mut seconds = countdown;
         let mut minutes = 0;
 
@@ -47,6 +47,10 @@ impl WindowManager {
         }
 
         frame.set_label(&*String::from(minutes_string + ":" + &seconds_string));
+
+        if update_background == false {
+            return;
+        }
 
         if countdown == 60 {
             self.set_color(Color::DarkBlue);

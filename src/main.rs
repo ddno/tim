@@ -5,19 +5,20 @@ use fltk::{app, enums::Color, frame::Frame, group, input, prelude::*, window::Wi
 
 use crate::buttons::set_button::SetButton;
 use crate::buttons::start_button::StartButton;
-use crate::keyboard_event::KeyboardEvent;
+use crate::input_device_event::InputDeviceEvent;
 use crate::window_manager::WindowManager;
 
 mod audio;
 mod buttons;
-mod keyboard_event;
+mod input_device_event;
 mod window_manager;
 
+const WINDOW_WIDTH: i32 = 200;
 const WINDOW_HEIGHT: i32 = 140;
 
 #[derive(Debug, Copy, Clone)]
 pub enum ChannelMessage {
-    UpdateCountdown(u32),
+    UpdateCountdown(u32, bool),
     StopCountdown,
 }
 
@@ -26,7 +27,7 @@ fn main() {
 
     let mut window_manager = WindowManager::new(
         Window::default()
-            .with_size(200, WINDOW_HEIGHT)
+            .with_size(WINDOW_WIDTH, WINDOW_HEIGHT)
             .with_label("Tim the Timer")
             .with_pos(50, 160),
     );
@@ -37,7 +38,7 @@ fn main() {
         .with_pos(0, -23)
         .size_of(&*window_manager.get_window().lock().unwrap());
 
-    window_manager.update_countdown(&mut frame, 60 * 5);
+    window_manager.update_countdown(&mut frame, 60 * 5, false);
 
     frame.set_label_size(70);
 
@@ -89,7 +90,7 @@ fn main() {
         thread_tx.clone(),
     );
 
-    KeyboardEvent::new(
+    InputDeviceEvent::new(
         window_manager.get_window(),
         start_button.button.clone(),
         input_minutes,
@@ -100,8 +101,8 @@ fn main() {
     window_manager.get_window().lock().unwrap().show();
 
     while app.wait() {
-        if let Some(ChannelMessage::UpdateCountdown(countdown)) = rx.recv() {
-            window_manager.update_countdown(&mut frame, countdown);
+        if let Some(ChannelMessage::UpdateCountdown(countdown, update_background)) = rx.recv() {
+            window_manager.update_countdown(&mut frame, countdown, update_background);
         }
     }
 }

@@ -8,7 +8,7 @@ use fltk::group::Flex;
 use fltk::prelude::{WidgetBase, WidgetExt};
 use fltk::window::Window;
 
-use crate::{ChannelMessage, WINDOW_HEIGHT};
+use crate::{ChannelMessage, WINDOW_HEIGHT, WINDOW_WIDTH};
 
 pub struct SetButton {
     pub button: Button,
@@ -45,10 +45,10 @@ impl SetButton {
 
             if local_window.pixel_h() > WINDOW_HEIGHT + EXPANDED_WINDOW_HEIGHT {
                 flex.hide();
-                local_window.set_size(200, WINDOW_HEIGHT);
+                local_window.set_size(WINDOW_WIDTH, WINDOW_HEIGHT);
             } else {
                 flex.show();
-                local_window.set_size(200, EXPANDED_WINDOW_HEIGHT);
+                local_window.set_size(WINDOW_WIDTH, EXPANDED_WINDOW_HEIGHT);
             }
         });
 
