@@ -6,12 +6,18 @@ use fltk::{app, enums::Color, frame::Frame, group, input, prelude::*, window::Wi
 use crate::buttons::set_button::SetButton;
 use crate::buttons::start_button::StartButton;
 use crate::input_device_event::InputDeviceEvent;
+#[cfg(target_os = "macos")]
+use crate::status_bar::StatusBar;
 use crate::window_manager::WindowManager;
 
 mod audio;
 mod buttons;
 mod input_device_event;
+mod traits;
 mod window_manager;
+
+#[cfg(target_os = "macos")]
+mod status_bar;
 
 const WINDOW_WIDTH: i32 = 200;
 const WINDOW_HEIGHT: i32 = 140;
@@ -100,9 +106,15 @@ fn main() {
 
     window_manager.get_window().lock().unwrap().show();
 
+    #[cfg(target_os = "macos")]
+    let mut status_bar = StatusBar::new();
+
     while app.wait() {
         if let Some(ChannelMessage::UpdateCountdown(countdown, update_background)) = rx.recv() {
             window_manager.update_countdown(&mut frame, countdown, update_background);
+
+            #[cfg(target_os = "macos")]
+            status_bar.update_countdown(countdown);
         }
     }
 }

@@ -94,9 +94,8 @@ impl StartButton {
             window.lock().unwrap().set_size(WINDOW_WIDTH, WINDOW_HEIGHT);
             window.lock().unwrap().set_color(Color::Black);
 
-            while let Ok(ChannelMessage::StopCountdown) = thread_rx.lock().unwrap().try_recv() {
-                println!("Clearing channel");
-            }
+            // Empty channel to make sure there are no remaining messages to stop countdown before starting (again)
+            while let Ok(ChannelMessage::StopCountdown) = thread_rx.lock().unwrap().try_recv() {}
 
             let thread_rx_clone = thread_rx.clone();
 
