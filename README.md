@@ -5,7 +5,7 @@ Mainly developed for Mac but should also work on other operating systems.
 
 ## Features
 
-- Changing background color when the countdown reaches one minute, then again when it reaches ten seconds.
+- Changes background color when the countdown reaches one minute, then again when it reaches ten seconds.
 - Use the default alarm sound or place a file named alarm.mp3 in the /assets folder for your own alarm sound.
 - Set the timer using keyboard controls:
     - Up/Down arrow keys: Increase/decrease minutes by one
@@ -14,6 +14,7 @@ Mainly developed for Mac but should also work on other operating systems.
     - Ctrl + Shift + Up/Down arrow keys: Increase/decrease seconds by five
     - Enter: Start/pause countdown
 - Set the timer with the mouse by hovering the cursor over the minutes or seconds display and scroll up or down
+- Show the countdown in the status bar (Mac only)
 
 ## Running the releases
 
@@ -36,3 +37,5 @@ xattr -d com.apple.quarantine Tim.app
 ![Screenshot](assets/screenshots/4.png "Screenshot")
 
 ![Screenshot](assets/screenshots/5.png "Screenshot")
+
+![Screenshot](assets/screenshots/6.png "Screenshot")

@@ -25,7 +25,7 @@ impl Audio {
                         .play_raw(source.convert_samples())
                         .expect("Failed to play audio");
 
-                    std::thread::sleep(std::time::Duration::from_secs(1));
+                    std::thread::sleep(std::time::Duration::from_millis(1200));
                 }
             } else {
                 let file = BufReader::new(File::open(alarm_file_path).unwrap());

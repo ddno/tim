@@ -2,6 +2,8 @@ use std::sync::{Arc, Mutex};
 
 use fltk::{enums::Color, frame::Frame, prelude::*, window::Window};
 
+use crate::traits::convert_countdown::ConvertCountdown;
+
 pub struct WindowManager {
     pub window: Arc<Mutex<Window>>,
 }
@@ -27,26 +29,9 @@ impl WindowManager {
     }
 
     pub fn update_countdown(&mut self, frame: &mut Frame, countdown: u32, update_background: bool) {
-        let mut seconds = countdown;
-        let mut minutes = 0;
+        let (minutes, seconds) = self.to_minutes_seconds(countdown);
 
-        if seconds >= 60 {
-            minutes = seconds / 60;
-        }
-
-        seconds = seconds - (minutes * 60);
-
-        let mut minutes_string = minutes.to_string();
-        if minutes < 10 {
-            minutes_string = "0".to_string() + &minutes.to_string();
-        }
-
-        let mut seconds_string = seconds.to_string();
-        if seconds < 10 {
-            seconds_string = "0".to_string() + &seconds.to_string();
-        }
-
-        frame.set_label(&*String::from(minutes_string + ":" + &seconds_string));
+        frame.set_label(&format!("{}:{}", minutes, seconds));
 
         if update_background == false {
             return;
@@ -61,3 +46,5 @@ impl WindowManager {
         }
     }
 }
+
+impl ConvertCountdown for WindowManager {}
