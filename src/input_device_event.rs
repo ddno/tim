@@ -22,6 +22,8 @@ impl InputDeviceEvent {
         input_seconds: IntInput,
         tx: Sender<ChannelMessage>,
     ) {
+        let mut input_minutes_clone = input_minutes.clone();
+
         let mut input_minutes = input_minutes.clone();
         let mut input_seconds = input_seconds.clone();
 
@@ -113,6 +115,24 @@ impl InputDeviceEvent {
                 let is_shift = app::is_event_shift();
                 let is_ctrl_shift = is_ctrl && is_shift;
                 let event_key = app::event_key();
+
+                (0..=9)
+                    .map(|digit| digit.to_string().parse::<char>().unwrap())
+                    .for_each(|ch| {
+                        if event_key == Key::from_char(ch) {
+                            let mut countdown = ch.to_string();
+
+                            if countdown == "0" {
+                                countdown = "10".to_string();
+                            }
+
+                            input_minutes_clone.set_value(&*format!("{}", countdown));
+                            tx.send(ChannelMessage::UpdateCountdown(
+                                60 * countdown.parse::<u32>().unwrap(),
+                                false,
+                            ));
+                        }
+                    });
 
                 if is_ctrl_shift && event_key == Key::Up {
                     change_seconds(5);
