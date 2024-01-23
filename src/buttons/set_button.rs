@@ -14,7 +14,7 @@ pub struct SetButton {
     pub button: Button,
 }
 
-const EXPANDED_WINDOW_HEIGHT: i32 = 190;
+pub const EXPANDED_WINDOW_HEIGHT: i32 = 190;
 
 impl SetButton {
     pub fn new(
