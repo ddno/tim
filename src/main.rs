@@ -6,6 +6,7 @@ use fltk::{app, enums::Color, frame::Frame, group, input, prelude::*, window::Wi
 use crate::buttons::set_button::SetButton;
 use crate::buttons::start_button::StartButton;
 use crate::input_device_event::InputDeviceEvent;
+use crate::menu_bar::MenuBar;
 #[cfg(target_os = "macos")]
 use crate::status_bar::StatusBar;
 use crate::window_manager::WindowManager;
@@ -16,6 +17,7 @@ mod input_device_event;
 mod traits;
 mod window_manager;
 
+mod menu_bar;
 #[cfg(target_os = "macos")]
 mod status_bar;
 
@@ -107,6 +109,7 @@ fn main() {
     window_manager.get_window().lock().unwrap().show();
 
     #[cfg(target_os = "macos")]
+    MenuBar::new();
     let mut status_bar = StatusBar::new();
 
     while app.wait() {
