@@ -1,6 +1,6 @@
 [package]
 name = "tim"
-version = "0.6.1"
+version = "0.7.1"
 edition = "2021"
 description = ""
 
@@ -8,6 +8,7 @@ description = ""
 fltk = "1"
 fltk-theme = "0.7"
 rodio = "0.17"
+webbrowser = "0.8.13"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.25"
